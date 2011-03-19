@@ -1,5 +1,16 @@
 #!/usr/bin/env python
+
+############################################################################################################################################
+# See also this sed script                                                                                                                 #
+# sed 's/^[ ]*//g' < weather.dat | grep ^[[:digit:]] | sort -n --key=2 | head -n1 | cut -f1 -d' '                                          #
+# sed 's/^[ ]*//g' < football.dat | grep ^[[:digit:]] | awk ' { print ($7 - $9) "\t" $2 } ' | sed 's/^-//g' | sort -n | head -n1 | cut -f2 #
+############################################################################################################################################
+
 import re
+
+# - create the new list
+# - sort it
+# - find the min/max element
 
 def weather_analyze():
     def get_number(x):
@@ -38,4 +49,5 @@ def football():
 
     print min_team
 
+weather_analyze()
 football()
