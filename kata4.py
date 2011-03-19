@@ -1,53 +1,32 @@
 #!/usr/bin/env python
 
-############################################################################################################################################
-# See also this sed script                                                                                                                 #
-# sed 's/^[ ]*//g' < weather.dat | grep ^[[:digit:]] | sort -n --key=2 | head -n1 | cut -f1 -d' '                                          #
-# sed 's/^[ ]*//g' < football.dat | grep ^[[:digit:]] | awk ' { print ($7 - $9) "\t" $2 } ' | sed 's/^-//g' | sort -n | head -n1 | cut -f2 #
-############################################################################################################################################
-
 import re
 
-# - create the new list
-# - sort it
-# - find the min/max element
+class Matcher(object):
+    def __init__(self, regexp, fname):
+        self.regexp = re.compile(regexp)
+        self.fname = fname
 
-def weather_analyze():
-    def get_number(x):
-        "return the number composed by the first n digits"
-        return int(re.findall("\d+", x)[0])
+    def compute(self, func):
+        res = {}
+        for line in open(self.fname):
+            m = self.regexp.match(line)
+            if m:
+                res[m.group(1)] = int(m.group(2)) - int(m.group(3))
 
-    min_range = 100
-    min_day = 1
-    # first find a good 
+        return func(res, key=lambda x: res[x])
 
-    for x in open("weather.dat"):
-        vals = re.split("\s+", x)
-        assert(len(vals) >= 3)
-        day, max, min = map(get_number, vals[1:4])
-        ran = max - min
-        if ran < min_range:
-            min_range = ran
-            min_day = day
 
-    print min_day, min_range
 
-def get_vals(s):
-    return re.split("\s+", s)
+def footbal():
+    line_re = re.compile(r'\s+\d+\. (?P<team>\w+).*?(?P<for>\d+)\s+-\s+(?P<ag>\d+).*')
+    res = {}
+    for line in open('football.dat'):
+        m = line_re.match(line)
+        res[m.group('team')] = int(m.group('for')) - int(m.group('ag'))
 
-def football():
-    foot = open('football.dat').readlines()
-    head = get_vals(foot[0])
-    # because we have some shit in the middle
-    fo, ag = head.index('F')+1, head.index('A')+2
-    min_score = min_team = None
-    for line in map(get_vals, foot[1:]):
-        diff = int(line[fo]) - int(line[ag])
-        if not min_score or (diff < min_score):
-            min_score = diff
-            min_team = line[2]
+    return min(res, key=lambda x: res[x])
 
-    print min_team
-
-weather_analyze()
-football()
+print Matcher('^\s+(?P<day>\d+)\s+(?P<max>\d+)\s+(?P<min>\d+).*', 'weather.dat').compute(max)
+print Matcher('\s+\d+\. (?P<team>\w+).*?(?P<for>\d+)\s+-\s+(?P<ag>\d+).*', 'football.dat').compute(min)
+              
