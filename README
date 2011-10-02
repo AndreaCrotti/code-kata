@@ -311,9 +311,14 @@ how many false positives you get.
    The naive implementation uses just a *set* as data structure,
    reading all the words from the words file.
 
-   It would be useful for this and other cases to define decorators
-   able to tell what is the memory usage and the speed of each
-   function.
+# It would be useful for this and other cases to define decorators
+# able to tell what is the memory usage and the speed of each
+# function.
+   
+   Then I started to reason about the performances, and how do I
+   compare the results given by a Naive checking against the results
+   of the Bloom filter.  So it would be interesting to have some unit
+   tests which are able to tell me if things are gettings slower.
 
 # Local Variables:
 # mode: org

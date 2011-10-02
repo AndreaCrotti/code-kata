@@ -1,10 +1,12 @@
 #!/usr/bin/env python2
+# -*- encoding: utf-8 -*-
+
 
 """Implementation a spell checker using a bloom filter
 
 Bloom filters are very simple. Take a big array of bits, initially all
 zero. Then take the things you want to look up (in our case we’ll use
-a dictionary of words). Produce ‘n’ independent hash values for each
+a dictionary of words). Produce n independent hash values for each
 word. Each hash is a number which is used to set the corresponding bit
 in the array of bits. Sometimes there’ll be clashes, where the bit
 will already be set from some other word. This doesn’t matter.
