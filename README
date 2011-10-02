@@ -300,7 +300,16 @@ word that it says it OK, look it up in the original dictionary. See
 how many false positives you get.
 
 ** Notes during development
+   An interface for a checker can be divided in two important phases:
+   - populate
+   - check
    
+   In the first phase we read the word list and generate the set or do
+   any other preparation operation, while in the second phase we
+   actually check if a word is part of the dictionary.
+
+   The naive implementation uses just a *set* as data structure,
+   reading all the words from the words file.
 
 # Local Variables:
 # mode: org

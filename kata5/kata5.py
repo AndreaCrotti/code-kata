@@ -36,8 +36,15 @@ class BloomChecker(object):
     def __init__(self):
         self.hash = (2 ** self.hash_dim) - 1
 
+    def _hash_word(self, word):
+        pass
+    
     def populate(self):
         pass
 
+    def check(self, word):
+        # compute the check and check if all the bits are there
+        pass
 
-# add some ways to compute the speed of the different approaches
+# add some ways to compute the speed of the different approaches and
+# the memory consumption
