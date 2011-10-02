@@ -320,6 +320,8 @@ how many false positives you get.
    of the Bloom filter.  So it would be interesting to have some unit
    tests which are able to tell me if things are gettings slower.
 
-# Local Variables:
-# mode: org
-# End:
+*** Implementation
+    The first idea to implement the Bloom filter was to generate an
+    array of booleans and use it smartly.  Unfortunately booleans are
+    not supported in as types in the array, so we have to resort to
+    use long integers and do some math with them.
