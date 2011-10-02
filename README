@@ -192,7 +192,6 @@ How Fast?
     to generate the password hash, is this a viable approach to
     attacking a password?
 
-
 * Kata Four: Data Munging
 
 Martin Fowler gave me a hard time for KataTwo, complaining that it was
@@ -226,6 +225,12 @@ Was the way you wrote the second program influenced by writing the
 first?  Is factoring out as much common code as possible always a good
 thing? Did the readability of the programs suffer because of this
 requirement? How about the maintainability?
+
+** Python
+   First attempt were two dirty regular expression matching.  Then I
+   factored out the regular expression handling in a generic *Matcher*
+   class.  This class has a /compute/ function, which skips the non
+   matching lines and apply the given function to the result.
 
 * Kata Five - Bloom Filters
 
@@ -293,6 +298,9 @@ Part two of the exercise is optional. Try generating random
 5-character words and feeding them in to your spell checker. For each
 word that it says it OK, look it up in the original dictionary. See
 how many false positives you get.
+
+** Notes during development
+   
 
 # Local Variables:
 # mode: org
