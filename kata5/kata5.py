@@ -17,10 +17,26 @@ from array import array
 
 # create an hash for each word in the dictionary
 
-class NaiveChecker(object):
+class SpellChecker(object):
+    def populate(self):
+        pass
+
+    def check(self, word):
+        pass
+
+    def spell_test(self, words):
+        """Take an iterable of words and return a list containing the
+        words which are not in the dictionary
+        """
+        not_found = [w for w in words if not self.check(w)]
+        return not_found
+
+
+class NaiveChecker(SpellChecker):
 
     def __init__(self):
         self.words = None
+        super(NaiveChecker, self).__init__()
 
     def populate(self):
         # one liner to read everything
@@ -30,11 +46,12 @@ class NaiveChecker(object):
         return word in self.words
 
 
-class BloomChecker(object):
+class BloomChecker(SpellChecker):
     hash_dim = 32
 
     def __init__(self):
         self.hash = (2 ** self.hash_dim) - 1
+        super(BloomChecker, self).__init__()
 
     def _hash_word(self, word):
         pass

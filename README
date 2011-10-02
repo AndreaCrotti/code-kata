@@ -311,6 +311,10 @@ how many false positives you get.
    The naive implementation uses just a *set* as data structure,
    reading all the words from the words file.
 
+   It would be useful for this and other cases to define decorators
+   able to tell what is the memory usage and the speed of each
+   function.
+
 # Local Variables:
 # mode: org
 # End:
