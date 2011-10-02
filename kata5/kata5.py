@@ -14,17 +14,22 @@ will already be set from some other word. This doesn’t matter.
 """
 
 DICT = "words"
+DEFAULT_HASH_DIM = 32
+DEFAULT_NUM_HASHES = 8
 
-from array import array
+from sys import getsizeof
 
 # create an hash for each word in the dictionary
 
 class SpellChecker(object):
     def populate(self):
-        pass
+        raise NotImplementedError
 
     def check(self, word):
-        pass
+        raise NotImplementedError
+
+    def get_size(self):
+        raise NotImplementedError
 
     def spell_test(self, words):
         """Take an iterable of words and return a list containing the
@@ -40,6 +45,9 @@ class NaiveChecker(SpellChecker):
         self.words = None
         super(NaiveChecker, self).__init__()
 
+    def get_size(self):
+        return getsizeof(self.words)
+
     def populate(self):
         # one liner to read everything
         self.words = set(x.strip() for x in open(DICT).readlines())
@@ -49,11 +57,15 @@ class NaiveChecker(SpellChecker):
 
 
 class BloomChecker(SpellChecker):
-    hash_dim = 32
 
-    def __init__(self):
+    def __init__(self, hash_dim=DEFAULT_HASH_DIM, num_hashes=DEFAULT_NUM_HASHES):
+        self.hash_dim = hash_dim
+        self.num_hashes = num_hashes
         self.hash = (2 ** self.hash_dim) - 1
         super(BloomChecker, self).__init__()
+
+    def get_size(self):
+        return self.hash_dim
 
     def _hash_word(self, word):
         pass
