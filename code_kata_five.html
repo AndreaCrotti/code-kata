@@ -1,0 +1,530 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" id="typepad-standard" xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="http://www.typepad.com/" />
+	
+	<meta name="description" content="There are many circumstances where we need to find out if something is a member of a set, and many algorithms for doing it. If the set is small, you can use bitmaps. When they get larger, hashes are a..." />
+	<link rel="stylesheet" href="http://codekata.pragprog.com/styles.css?v=6" type="text/css" media="screen" />
+	<link rel="stylesheet" href="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/themes/common/print.css" type="text/css" media="print" />
+	<link rel="alternate" type="application/atom+xml" title="Posts on 'CodeKata' (Atom)" href="http://codekata.pragprog.com/atom.xml" />
+	<link rel="alternate" type="application/rss+xml" title="Posts on 'CodeKata' (RSS 1.0)" href="http://codekata.pragprog.com/index.rdf" />
+	<link rel="alternate" type="application/rss+xml" title="Posts on 'CodeKata' (RSS 2.0)" href="http://codekata.pragprog.com/rss.xml" />
+	<script type="text/javascript">
+		var TPApp = {};
+		TPApp.app_uri = "http://www.typepad.com/";
+	</script>
+	<script type="text/javascript" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/js/yui/yahoo-dom-event.js,/js/app/thumbnail-gallery-min.js,/js/sixatrack-loader.js,/js/app/flyouts-min.js"></script>
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['t2._setAccount', 'UA-225723-36']);
+		_gaq.push(['t2._setDomainName', 'none']);
+		_gaq.push(['t2._setAllowLinker', true]);
+        _gaq.push(['t2._setCustomVar', 1, 'Blog', '6a00d83451c41c69e200d8341c84fe53ef', 3]);
+        _gaq.push(['t2._setCustomVar', 2, 'Page Type', 'Individual', 3]);
+		_gaq.push(['t2._trackPageview']);
+
+		(function() {
+		  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+	<title>CodeKata: Kata Five - Bloom Filters</title>
+	<link rel="start" href="http://codekata.pragprog.com/" title="Home" />
+	<link rel="prev" href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?no_prefetch=1" title="Kata Six: Anagrams" />
+	<link rel="next" href="http://codekata.pragprog.com/2007/01/kata_four_data_.html?no_prefetch=1" title="Kata Four: Data Munging" />
+<!--
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+         xmlns:dc="http://purl.org/dc/elements/1.1/">
+<rdf:Description
+    rdf:about="http://codekata.pragprog.com/2007/01/kata_five_bloom.html"
+    trackback:ping="http://www.typepad.com/services/trackback/6a00d83451c41c69e200d8341c850053ef"
+    dc:title="Kata Five - Bloom Filters"
+    dc:identifier="http://codekata.pragprog.com/2007/01/kata_five_bloom.html"
+    dc:description="There are many circumstances where we need to find out if something is a member of a set, and many algorithms for doing it. If the set is small, you can use bitmaps. When they get larger, hashes are a..."
+    dc:creator="Dave Thomas"
+    dc:date="2007-01-28T17:58:36-06:00" />
+</rdf:RDF>
+-->
+
+</head>
+
+<body class="layout-two-column-right">
+	
+	<div id="container">
+		<div id="container-inner" class="pkg">
+			
+			<!-- banner -->
+<div id="banner">
+	<div id="banner-inner" class="pkg">
+		
+		<h1 id="banner-header"><a href="http://codekata.pragprog.com/" accesskey="1">CodeKata</a></h1>
+		<h2 id="banner-description">
+			How to Become a Better Developer
+		</h2>
+	</div>
+</div>
+
+
+
+			<div id="pagebody">
+				<div id="pagebody-inner" class="pkg">
+					<div id="alpha">
+						<div id="alpha-inner" class="pkg">
+							<!-- content nav -->
+<p class="content-nav">
+	<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html">&laquo; Kata Six: Anagrams</a> |
+	<a href="http://codekata.pragprog.com/">Main</a>
+	| <a href="http://codekata.pragprog.com/2007/01/kata_four_data_.html">Kata Four: Data Munging &raquo;</a>
+</p>
+
+<!-- entry -->
+	<h2 class="date-header">January 28, 2007</h2>
+
+
+<div class="entry-author-dave_thomas entry-type-post entry" id="entry-15481499">
+			<h3 class="entry-header">Kata Five - Bloom Filters</h3>
+	
+	<div class="entry-content">
+		<div class="entry-body">
+			<p>
+There are many circumstances where we need to find out if something is a
+member of a set, and many algorithms for doing it. If the set is small, you
+can use bitmaps. When they get larger, hashes are a useful technique. But
+when the sets get big, we start bumping in to limitations. Holding 250,000
+words in memory for a spell checker might be too big an overhead if your
+target environment is a PDA or cell phone. Keeping a list of web-pages
+visited might be extravagant when you get up to tens of millions of pages.
+Fortunately, there&#8217;s a technique that can help.
+</p>
+		</div>
+					<a id="more"></a>
+			<div class="entry-more">
+				<p>
+Bloom filters are a
+30-year-old statistical way of testing for membership in a set. They
+greatly reduce the amount of storage you need to represent the set, but at
+a price: they&#8217;ll sometimes report that something is in the set when
+it isn&#8217;t (but it&#8217;ll never do the opposite; if the filter says
+that the set doesn&#8217;t contain your object, you know that it
+doesn&#8217;t). And the nice thing is you can control the accuracy; the
+more memory you&#8217;re prepared to give the algorithm, the fewer false
+positives you get. I once wrote a spell checker for a PDP-11 which stored a
+dictionary of 80,000 words in 16kbytes, and I very rarely saw it let though
+an incorrect word. (Update: I must have mis-remembered these figures,
+because they are not in line with the theory. Unfortunately, I can no
+longer read the 8&quot; floppies holding the source, so I can&#8217;t get
+the correct numbers. Let&#8217;s just say that I got a decent sized
+dictionary, along with the spell checker, all in under 64k.)
+</p>
+<p>
+Bloom filters are very simple. Take a big array of bits, initially all
+zero. Then take the things you want to look up (in our case we&#8217;ll use
+a dictionary of words). Produce &#8216;n&#8217; independent hash values for
+each word. Each hash is a number which is used to set the corresponding bit
+in the array of bits. Sometimes there&#8217;ll be clashes, where the bit
+will already be set from some other word. This doesn&#8217;t matter.
+</p>
+<p>
+To check to see of a new word is already in the dictionary, perform the
+same hashes on it that you used to load the bitmap. Then check to see if
+each of the bits corresponding to these hash values is set. If any bit is
+not set, then you never loaded that word in, and you can reject it.
+</p>
+<p>
+The Bloom filter reports a false positive when a set of hashes for a word
+all end up corresponding to bits that were set previously by other words.
+In practice this doesn&#8217;t happen too often as long as the bitmap
+isn&#8217;t too heavily loaded with one-bits (clearly if every bit is one,
+then it&#8217;ll give a false positive on every lookup). There&#8217;s a
+discussion of the math in Bloom filters at <a
+href="http://www.cs.wisc.edu/~cao/papers/summary-cache/node8.html">www.cs.wisc.edu/~cao/papers/summary-cache/node8.html</a>.
+</p>
+<p>
+So, this kata is fairly straightforward. Implement a Bloom filter based
+spell checker. You&#8217;ll need some kind of bitmap, some hash functions,
+and a simple way of reading in the dictionary and then the words to check.
+For the hash function, remember that you can always use something that
+generates a fairly long hash (such as MD5) and then take your smaller hash
+values by extracting sequences of bits from the result. On a Unix box you
+can find a list of words in /usr/dict/words (or possibly in
+/usr/share/dict/words). For others, I&#8217;ve put a word list up at <a
+href="http://pragprog.com/katadata/wordlist.txt">pragprog.com/katadata/wordlist.txt</a>.
+</p>
+<p>
+Play with using different numbers of hashes, and with different bitmap
+sizes.
+</p>
+<p>
+Part two of the exercise is optional. Try generating random 5-character
+words and feeding them in to your spell checker. For each word that it says
+it OK, look it up in the original dictionary. See how many false positives
+you get.
+</p>
+			</div>
+		
+		
+	</div>
+	<div class="entry-footer">
+			<p class="entry-footer-info">
+				<span class="post-footers">Posted at 05:58 PM </span> <span class="separator">|</span> <a class="permalink" href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html">Permalink</a>
+			</p>
+		
+		<!-- technorati tags -->
+	
+
+
+		<!-- post footer links -->
+
+	</div>
+</div>
+
+		<div class="trackbacks">
+		<a id="trackback"></a>
+		<h3 class="trackbacks-header">TrackBack</h3>
+		<div class="trackbacks-info">
+			<p>TrackBack URL for this entry:<br /><span class="trackbacks-link">http://www.typepad.com/services/trackback/6a00d83451c41c69e200d8341c850053ef</span></p>
+			<p>Listed below are links to weblogs that reference <a href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html">Kata Five - Bloom Filters</a>:</p>
+		</div>
+		<div class="trackbacks-content">
+			
+		</div>
+	</div>
+
+
+
+
+
+
+
+        
+        <a id="comments"></a>
+	<div class="comments" id="all-comments">
+		<h3 class="comments-header">Comments</h3>
+		
+		<div class="comments-content" id="comments-content">
+                <!-- comment list --><a id="c6a00d83451c41c69e20133f368a43f970b"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-6a00d83451c41c69e20133f368a43f970b">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e20133f368a43f970b-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/20-50si.gif" alt="szeryf" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-6a00d83451c41c69e20133f368a43f970b-content">
+		<span id="comment-6a00d83451c41c69e20133f368a43f970b-content"><p>And the number of bits in the comment above is the number of bits per hash function, so the length of bit vector was 2^(number of bits) and it needed 2^(number of bits - 3) bytes. So for the 19 bits it needs 64kB of memory.</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://szeryf.wordpress.com/" href="http://szeryf.wordpress.com/">szeryf</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html?cid=6a00d83451c41c69e20133f368a43f970b#comment-6a00d83451c41c69e20133f368a43f970b">August 30, 2010 at 01:09 AM</a>
+	</p>
+</div><a id="c6a00d83451c41c69e20133f368a1bc970b"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-6a00d83451c41c69e20133f368a1bc970b">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e20133f368a1bc970b-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/20-50si.gif" alt="szeryf" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-6a00d83451c41c69e20133f368a1bc970b-content">
+		<span id="comment-6a00d83451c41c69e20133f368a1bc970b-content"><p>Here&#39;s my solution in Java: <a href="http://gist.github.com/557075" rel="nofollow">http://gist.github.com/557075</a></p>
+
+<p>What I noticed (and thought it was strange at first) that the number of bits must be at least a couple of time bigger than the number of words in the dictionary. Otherwise the Bloom Filter&#39;s bit vector will be almost completely filled and there will be many false positives. There is also no point in increasing the hash functions number for small bit vector as this will also make it even more filled.</p>
+
+<p>My results for 3 hash functions:</p>
+
+<p>16 bits - 88% filled - 56% of false positives<br />
+17 bits - 65% filled - 20% of false positives<br />
+18 bits - 40% filled - 4% of false positives<br />
+19 bits - 23% filled - 1% of false positives</p>
+
+<p>And the best hash functions I found is fragments of MD5 hash for the string.</p>
+
+<p><br />
+</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://szeryf.wordpress.com/" href="http://szeryf.wordpress.com/">szeryf</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html?cid=6a00d83451c41c69e20133f368a1bc970b#comment-6a00d83451c41c69e20133f368a1bc970b">August 30, 2010 at 01:05 AM</a>
+	</p>
+</div><a id="c6a00d83451c41c69e20134867bc6ff970c"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-6a00d83451c41c69e20134867bc6ff970c">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e20134867bc6ff970c-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/10-50si.gif" alt="travesti" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-6a00d83451c41c69e20134867bc6ff970c-content">
+		<span id="comment-6a00d83451c41c69e20134867bc6ff970c-content"><p>This was an interesting puzzle for me, as I&#39;ve not heard of Bloom filters before - it&#39;s an interesting technique to have up your sleeve. Keep up the good work!</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://www.xtravesti.com/" href="http://www.xtravesti.com/">travesti</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html?cid=6a00d83451c41c69e20134867bc6ff970c#comment-6a00d83451c41c69e20134867bc6ff970c">August 26, 2010 at 11:56 AM</a>
+	</p>
+</div><a id="c6a00d83451c41c69e2013484f0282b970c"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-6a00d83451c41c69e2013484f0282b970c">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e2013484f0282b970c-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/16-50si.gif" alt="Joshua Hollander" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-6a00d83451c41c69e2013484f0282b970c-content">
+		<span id="comment-6a00d83451c41c69e2013484f0282b970c-content"><p>Here is my Scala solution: <a href="http://the-real-jho.blogspot.com/2010/06/code-kata-5.html" rel="nofollow">http://the-real-jho.blogspot.com/2010/06/code-kata-5.html</a></p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://jho.scrapping.cc" href="http://jho.scrapping.cc">Joshua Hollander</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html?cid=6a00d83451c41c69e2013484f0282b970c#comment-6a00d83451c41c69e2013484f0282b970c">June 25, 2010 at 05:14 PM</a>
+	</p>
+</div><a id="c6a00d83451c41c69e20128762eb3b3970c"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-6a00d83451c41c69e20128762eb3b3970c">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e20128762eb3b3970c-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/10-50si.gif" alt="Jerome Baum" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-6a00d83451c41c69e20128762eb3b3970c-content">
+		<span id="comment-6a00d83451c41c69e20128762eb3b3970c-content"><p>@Matt: That wouldn&#39;t work. Since there are an infinite amount of such words, you&#39;ll end up with a full bitmap (of 1s) which will report every word as &quot;not in the dictionary&quot; -- then you&#39;ll have the positive filter reporting &quot;it&#39;s in there&quot; and the negative one reporting &quot;it&#39;s not.&quot;</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		Jerome Baum |
+		<a href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html?cid=6a00d83451c41c69e20128762eb3b3970c#comment-6a00d83451c41c69e20128762eb3b3970c">December 07, 2009 at 09:57 PM</a>
+	</p>
+</div><a id="c6a00d83451c41c69e20120a6a669db970c"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-6a00d83451c41c69e20120a6a669db970c">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e20120a6a669db970c-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/15-50si.gif" alt="Stephen Doyle" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-6a00d83451c41c69e20120a6a669db970c-content">
+		<span id="comment-6a00d83451c41c69e20120a6a669db970c-content"><p>Here is my solution in Ruby ... <a href="http://softwareramblings.com/2009/11/codekata-kata-five-solution.html" rel="nofollow">http://softwareramblings.com/2009/11/codekata-kata-five-solution.html</a></p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://softwareramblings.com" href="http://softwareramblings.com">Stephen Doyle</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html?cid=6a00d83451c41c69e20120a6a669db970c#comment-6a00d83451c41c69e20120a6a669db970c">November 03, 2009 at 06:58 PM</a>
+	</p>
+</div><a id="c94280554"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-94280554">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200e54fab63cf8833-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/16-50si.gif" alt="Matt Powell" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-94280554-content">
+		<span id="comment-94280554-content"><p>See, this is fantastic! All you have to do is generate a bitset for all the words that *aren&#39;t* in the target language, and your spell-checker is perfect!</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		Matt Powell |
+		<a href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html?cid=94280554#comment-6a00d83451c41c69e200e54fab63cf8833">December 19, 2007 at 10:32 PM</a>
+	</p>
+</div><a id="c88486288"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-88486288">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200e54f8bf35c8834-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/16-50si.gif" alt="Edward S. Marshall" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-88486288-content">
+		<span id="comment-88486288-content"><p>The new URL for the word list appears to be archive.org, since it looks like the list is no longer online:</p>
+
+<p><a href="http://web.archive.org/web/20070704025714/http://pragmaticprogrammer.com/katadata/wordlist.txt" rel="nofollow">http://web.archive.org/web/20070704025714/http://pragmaticprogrammer.com/katadata/wordlist.txt</a></p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://esm.logic.net/" href="http://esm.logic.net/">Edward S. Marshall</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html?cid=88486288#comment-6a00d83451c41c69e200e54f8bf35c8834">November 02, 2007 at 09:03 AM</a>
+	</p>
+</div><a id="c69222824"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-69222824">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200d83513e1ce53ef-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/06-50si.gif" alt="Michael Davies" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-69222824-content">
+		<span id="comment-69222824-content"><p>Sorry, that should have read (1-e^(-kn/m))^k of course.</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://dreamsofascorpion.blogspot.com/" href="http://dreamsofascorpion.blogspot.com/">Michael Davies</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html?cid=69222824#comment-6a00d83451c41c69e200d83513e1ce53ef">May 11, 2007 at 01:50 PM</a>
+	</p>
+</div><a id="c69221408"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-69221408">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200d83513dff153ef-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/06-50si.gif" alt="Michael Davies" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-69221408-content">
+		<span id="comment-69221408-content"><p>There&#39;s a small error in the linked summary - the probability of a false positive should be approximated to (1-e^(-kn/m)) rather than  (1-e^(kn/m)) as it states.</p>
+
+<p>This was an interesting puzzle for me, as I&#39;ve not heard of Bloom filters before - it&#39;s an interesting technique to have up your sleeve. Keep up the good work!</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://dreamsofascorpion.blogspot.com/" href="http://dreamsofascorpion.blogspot.com/">Michael Davies</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html?cid=69221408#comment-6a00d83451c41c69e200d83513dff153ef">May 11, 2007 at 01:36 PM</a>
+	</p>
+</div><a id="c66828632"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-66828632">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200d8341c850553ef-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/15-50si.gif" alt="Matthew Ueckerman" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-66828632-content">
+		<span id="comment-66828632-content"><p>Word list URL should read <a href="http://pragmaticprogrammer.com/katadata/wordlist.txt" rel="nofollow">http://pragmaticprogrammer.com/katadata/wordlist.txt</a></p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://www.ueckerman.net/" href="http://www.ueckerman.net/">Matthew Ueckerman</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html?cid=66828632#comment-6a00d83451c41c69e200d8341c850553ef">April 18, 2007 at 01:43 AM</a>
+	</p>
+</div>
+
+		</div>
+        
+	</div>
+    	<!-- comment-form-atp -->
+
+
+<p class="comments-closed">
+	The comments to this entry are closed.
+</p>
+
+
+
+    	
+
+
+						</div>
+					</div>
+					<div id="beta">
+						<div id="beta-inner" class="pkg">
+							
+<!-- sidebar -->
+
+
+<div class="module-syndicate module">
+	<div class="module-content">
+		<a href="http://codekata.pragprog.com/atom.xml">Subscribe to this blog's feed</a>
+	</div>
+</div>
+<!-- user photo -->
+	<div class="module-photo module">
+		<div class="module-content"><img src="http://pragdave.blogs.pragprog.com/.a/6a00d83451c41c69e200e55005ede28834-150wi" alt="My Photo" /></div>
+	</div>
+
+<div class="module-typelist module">
+	<h2 class="module-header">Other links</h2>
+	<div class="typelist-plain module-content">
+		<ul class="module-list">
+							<li class="module-list-item"><div class="typelist-note-label"><a href="http://pragdave.pragprog.com">My Blog</a></div><div class="typelist-note">Dave's blog, which stuff on Ruby, Rails, general programming, careers, and other stuff.</div></li>
+							<li class="module-list-item"><div class="typelist-note-label"><a href="http://pragmaticprogrammer.com/">The Pragmatic Programmers</a></div><div class="typelist-note">Where it all started! Have a look at the books we're publishing on all sorts of programming topics. If you liked the kata, you might also like <a href="http://www.pragmaticprogrammer.com/titles/fr_quiz/">The Best of Ruby Quiz</a>.</div></li>
+			
+		</ul>
+	</div>
+</div>
+
+	<div class="module-archives module">
+		<h2 class="module-header"><a href="http://codekata.pragprog.com/archives.html">Archives</a></h2>
+		<div class="module-content">
+			<ul class="module-list">
+									<li class="module-list-item"><a href="http://codekata.pragprog.com/2007/01/index.html">January 2007</a></li>
+				
+			</ul>
+		</div>
+	</div>
+
+<div class="module-typelist module">
+	<h2 class="module-header">The Kata</h2>
+	<div class="module-content">
+		<ul class="module-list">
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/code_kata_one_s.html">1. Supermarket Pricing</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_two_karate.html">2. Karate Chop</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_three_how_.html">3. How Big, How Fast?</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_four_data_.html">4. Data Munging</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html">5. Bloom Filters</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html">6. Anagrams</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_seven_howd.html">7. How'd I Do?</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_eight_conf.html">8. Conflicting Objectives</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_nine_back_.html">9. Back to the CheckOut</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_ten_hashes.html">10. Hashes vs. Classes</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_eleven_sor.html">11. Sorting it Out</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_twelve_bes.html#more">12. Best Sellers</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_thirteen_c.html">13, Counting Code Lines</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_fourteen_t.html">14. Tom Swift Under Milk Wood</a></li>
+							<li class="module-list-item"><a title="" href="http://www.codekata.com/2007/01/code_kata_fifte.html">15. Playing With Bits</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_sixteen_bu.html#more">16. Business Rules</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_seventeen_.html">17. More Business Processing</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_eighteen_t.html">18. Transitive Dependencies</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_nineteen_w.html">19. Word Chains</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_twenty_klo.html">20. Klondike</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_twenty_one.html">21. Simple Lists</a></li>
+			
+		</ul>
+	</div>
+</div>
+
+<div class="module-widget module" id="widget-Lijit_lijit_wijit">
+	<div class="module-content">
+    	<script type="text/javascript" src="http://www.lijit.com/informers/wijits?username=pragdave&amp;js=1"></script><a style='color: #999' href='http://www.lijit.com' id='lijit_wijit_pvs_link'>Lijit Search</a>
+	</div>
+</div>
+
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+			
+
+		</div>
+	</div>
+	
+
+<script type="text/javascript">
+<!--
+var extra_happy = Math.floor(1000000000 * Math.random());
+document.write('<img src="http://www.typepad.com/t/stats?blog_id=633036&amp;user_id=2226312&amp;page=' + escape(location.href) + '&amp;referrer=' + escape(document.referrer) + '&amp;i=' + extra_happy + '" width="1" height="1" alt="" style="position: absolute; top: 0; left: 0;" />');
+// -->
+</script>
+
+
+<!-- Start Quantcast tag -->
+<script type="text/javascript" src="http://edge.quantserve.com/quant.js"></script>
+<script type="text/javascript">_qoptions = { tags:"typepad.extended" }; _qacct="p-fcYWUmj5YbYKM"; quantserve();</script>
+<noscript>
+<a href="http://www.quantcast.com/p-fcYWUmj5YbYKM" target="_blank"><img src="http://pixel.quantserve.com/pixel/p-fcYWUmj5YbYKM.gif?tags=typepad.extended" style="display: none" border="0" height="1" width="1" alt="Quantcast"/></a>
+</noscript>
+<!-- End Quantcast tag -->
+
+
+
+ 
+
+<!-- Blogside Toolbar -->
+<script type="text/javascript">
+    var TPToolbar = {
+        src:   "http://www.typepad.com/services/toolbar?blog_id=6a00d83451c41c69e200d8341c84fe53ef&asset_id=6a00d83451c41c69e200d8341c850053ef&atype=Individual&to=http%3A%2F%2Fcodekata.pragprog.com%2F2007%2F01%2Fkata_five_bloom.html&autofollowed=0",
+        asset_xid: "6a00d83451c41c69e200d8341c850053ef",
+    
+        bookmarklet_uri: "http://static.typepad.com/.shared/js/qp/loader-combined-min.js"
+    };
+    var TYPEPAD___bookmarklet_domain = "http://www.typepad.com/";
+</script>
+<script type="text/javascript" src="/.shared/js/toolbar/blogside-toolbar-combined-min.js"></script>
+<!-- End Blogside Toolbar -->
+<!-- Begin comScore Tag -->
+<script>
+document.write(unescape("%3Cscript src='" + (document.location.protocol == "https:" ? "https://sb" : "http://b") + ".scorecardresearch.com/beacon.js'%3E%3C/script%3E"));
+</script>
+<script>
+COMSCORE.beacon({
+  c1: 2,
+  c2: "6035669",
+  c3: "",
+  c4: "http://codekata.pragprog.com/2007/01/kata_five_bloom.html",
+  c5: "",
+  c6: "",
+  c15: ""
+});
+</script>
+<noscript>
+  <img src="http://b.scorecardresearch.com/b?c1=2&c2=6035669&c3=&c4=http%3A%2F%2Fcodekata.pragprog.com%2F2007%2F01%2Fkata_five_bloom.html&c5=&c6=&c15=&cv=1.3&cj=1" style="display:none" width="0" height="0" alt="" />
+</noscript>
+<!-- End comScore Tag -->
+</body>
+</html>
+<!-- ph=1 -->

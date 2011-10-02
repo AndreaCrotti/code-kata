@@ -1,0 +1,701 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" id="typepad-standard" xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="http://www.typepad.com/" />
+	
+	<meta name="description" content="Back to non-realistic coding this week (sorry, Martin). Let's solve some crossword puzzle clues. In England, I used to waste hour upon hour doing newspaper crosswords. As crossword fans will know, English cryptic crosswords have a totally different feel to..." />
+	<link rel="stylesheet" href="http://codekata.pragprog.com/styles.css?v=6" type="text/css" media="screen" />
+	<link rel="stylesheet" href="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/themes/common/print.css" type="text/css" media="print" />
+	<link rel="alternate" type="application/atom+xml" title="Posts on 'CodeKata' (Atom)" href="http://codekata.pragprog.com/atom.xml" />
+	<link rel="alternate" type="application/rss+xml" title="Posts on 'CodeKata' (RSS 1.0)" href="http://codekata.pragprog.com/index.rdf" />
+	<link rel="alternate" type="application/rss+xml" title="Posts on 'CodeKata' (RSS 2.0)" href="http://codekata.pragprog.com/rss.xml" />
+	<script type="text/javascript">
+		var TPApp = {};
+		TPApp.app_uri = "http://www.typepad.com/";
+	</script>
+	<script type="text/javascript" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/js/yui/yahoo-dom-event.js,/js/app/thumbnail-gallery-min.js,/js/sixatrack-loader.js,/js/app/flyouts-min.js"></script>
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['t2._setAccount', 'UA-225723-36']);
+		_gaq.push(['t2._setDomainName', 'none']);
+		_gaq.push(['t2._setAllowLinker', true]);
+        _gaq.push(['t2._setCustomVar', 1, 'Blog', '6a00d83451c41c69e200d8341c84fe53ef', 3]);
+        _gaq.push(['t2._setCustomVar', 2, 'Page Type', 'Individual', 3]);
+		_gaq.push(['t2._trackPageview']);
+
+		(function() {
+		  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+	<title>CodeKata: Kata Six: Anagrams</title>
+	<link rel="start" href="http://codekata.pragprog.com/" title="Home" />
+	<link rel="prev" href="http://codekata.pragprog.com/2007/01/kata_seven_howd.html?no_prefetch=1" title="Kata Seven: How'd I Do?" />
+	<link rel="next" href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html?no_prefetch=1" title="Kata Five - Bloom Filters" />
+<!--
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+         xmlns:dc="http://purl.org/dc/elements/1.1/">
+<rdf:Description
+    rdf:about="http://codekata.pragprog.com/2007/01/kata_six_anagra.html"
+    trackback:ping="http://www.typepad.com/services/trackback/6a00d83451c41c69e200d835186bf269e2"
+    dc:title="Kata Six: Anagrams"
+    dc:identifier="http://codekata.pragprog.com/2007/01/kata_six_anagra.html"
+    dc:description="Back to non-realistic coding this week (sorry, Martin). Let&#39;s solve some crossword puzzle clues. In England, I used to waste hour upon hour doing newspaper crosswords. As crossword fans will know, English cryptic crosswords have a totally different feel to..."
+    dc:creator="Dave Thomas"
+    dc:date="2007-01-28T17:56:52-06:00" />
+</rdf:RDF>
+-->
+
+</head>
+
+<body class="layout-two-column-right">
+	
+	<div id="container">
+		<div id="container-inner" class="pkg">
+			
+			<!-- banner -->
+<div id="banner">
+	<div id="banner-inner" class="pkg">
+		
+		<h1 id="banner-header"><a href="http://codekata.pragprog.com/" accesskey="1">CodeKata</a></h1>
+		<h2 id="banner-description">
+			How to Become a Better Developer
+		</h2>
+	</div>
+</div>
+
+
+
+			<div id="pagebody">
+				<div id="pagebody-inner" class="pkg">
+					<div id="alpha">
+						<div id="alpha-inner" class="pkg">
+							<!-- content nav -->
+<p class="content-nav">
+	<a href="http://codekata.pragprog.com/2007/01/kata_seven_howd.html">&laquo; Kata Seven: How'd I Do?</a> |
+	<a href="http://codekata.pragprog.com/">Main</a>
+	| <a href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html">Kata Five - Bloom Filters &raquo;</a>
+</p>
+
+<!-- entry -->
+	<h2 class="date-header">January 28, 2007</h2>
+
+
+<div class="entry-author-dave_thomas entry-type-post entry" id="entry-15481469">
+			<h3 class="entry-header">Kata Six: Anagrams</h3>
+	
+	<div class="entry-content">
+		<div class="entry-body">
+			<p>
+Back to non-realistic coding this week (sorry, Martin). Let's solve some crossword puzzle clues.
+</p>
+		</div>
+					<a id="more"></a>
+			<div class="entry-more">
+				<p>
+In England, I used to waste hour upon hour doing newspaper crosswords. As
+crossword fans will know, English cryptic crosswords have a totally
+different feel to their American counterparts: most clues involve punning
+or word play, and there are lots of anagrams to work through. For example,
+a recent Guardian <a
+href="http://www.guardian.co.uk/crossword/java/blank/0,7082,-5903,00.html">crossword</a>
+had:
+</p>
+<pre>
+  Down:
+    ..
+    21. Most unusual form of arrest (6)
+</pre>
+<p>
+The hint is the phrase &#8216;form of,&#8217; indicating that we&#8217;re
+looking for an anagram. Sure enough &#8216;arrest&#8217; has six letters,
+and can be arranged nicely into &#8216;rarest,&#8217; meaning &#8216;most
+unusual.&#8217; (Other anagrams include raster, raters, Sartre, and starer)
+</p>
+<p>
+A while back we had a thread on the Ruby mailing list about finding
+anagrams, and I&#8217;d like to resurrect it here. The challenge is fairly
+simple: given a file containing one word per line, print out all the
+combinations of words that are anagrams; each line in the output contains
+all the words from the input that are anagrams of each other. For example,
+your program might include in its output:
+</p>
+<pre>
+  kinship pinkish
+  enlist inlets listen silent
+  boaster boaters borates
+  fresher refresh
+  sinks skins
+  knits stink
+  rots sort
+</pre>
+<p>
+If you run this on the word list <a
+href="http://pragdave.pragprog.com/data/wordlist.txt">here</a> you should
+find 2,530 sets of anagrams (a total of 5,680 words). Running on a larger
+dictionary (about 234k words) on my OSX box produces 15,048 sets of
+anagrams (including all-time favorites such as actaeonidae/donatiaceae,
+crepitant/pittancer, and (for those readers in Florida)
+electoral/recollate).
+</p>
+<p>
+For added programming pleasure, find the longest words that are anagrams,
+and find the set of anagrams containing the most words (so &quot;parsley
+players replays sparely&quot; would not win, having only four words in the
+set).
+</p>
+<h2>Kata Objectives</h2>
+<p>
+Apart from having some fun with words, this kata should make you think
+somewhat about algorithms. The simplest algorithms to find all the anagram
+combinations may take inordinate amounts of time to do the job. Working
+though alternatives should help bring the time down by orders of magnitude.
+To give you a possible point of comparison, I hacked a solution together in
+25 lines of Ruby. It runs on the word list from my web site in 1.5s on a
+1GHz PPC. It&#8217;s also an interesting exercise in testing: can you write
+unit tests to verify that your code is working correctly before setting it
+to work on the full dictionary.
+</p>
+			</div>
+		
+		
+	</div>
+	<div class="entry-footer">
+			<p class="entry-footer-info">
+				<span class="post-footers">Posted at 05:56 PM </span> <span class="separator">|</span> <a class="permalink" href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html">Permalink</a>
+			</p>
+		
+		<!-- technorati tags -->
+	
+
+
+		<!-- post footer links -->
+
+	</div>
+</div>
+
+		<div class="trackbacks">
+		<a id="trackback"></a>
+		<h3 class="trackbacks-header">TrackBack</h3>
+		<div class="trackbacks-info">
+			<p>TrackBack URL for this entry:<br /><span class="trackbacks-link">http://www.typepad.com/services/trackback/6a00d83451c41c69e200d835186bf269e2</span></p>
+			<p>Listed below are links to weblogs that reference <a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html">Kata Six: Anagrams</a>:</p>
+		</div>
+		<div class="trackbacks-content">
+			
+		</div>
+	</div>
+
+
+
+
+
+
+
+        
+        <a id="comments"></a>
+	<div class="comments" id="all-comments">
+		<h3 class="comments-header">Comments</h3>
+		
+		<div class="comments-content" id="comments-content">
+                <!-- comment list --><a id="c6a00d83451c41c69e20133f369e20c970b"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-6a00d83451c41c69e20133f369e20c970b">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e20133f369e20c970b-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/20-50si.gif" alt="szeryf" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-6a00d83451c41c69e20133f369e20c970b-content">
+		<span id="comment-6a00d83451c41c69e20133f369e20c970b-content"><p>The prime multiplication trick is nice one, but there is a simpler trick, too. You can sort the lowercased letters of the string (Aarhus -&gt; aahrsu) and use that as a key in your dictionary.</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://szeryf.wordpress.com/" href="http://szeryf.wordpress.com/">szeryf</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=6a00d83451c41c69e20133f369e20c970b#comment-6a00d83451c41c69e20133f369e20c970b">August 30, 2010 at 07:23 AM</a>
+	</p>
+</div><a id="c6a00d83451c41c69e2013486789dd5970c"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-6a00d83451c41c69e2013486789dd5970c">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e2013486789dd5970c-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/20-50si.gif" alt="RamonGustav" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-6a00d83451c41c69e2013486789dd5970c-content">
+		<span id="comment-6a00d83451c41c69e2013486789dd5970c-content"><p>Do you desire a house but you lack enough cash to acquire it?</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://www.maxipharmacy.com" href="http://www.maxipharmacy.com">RamonGustav</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=6a00d83451c41c69e2013486789dd5970c#comment-6a00d83451c41c69e2013486789dd5970c">August 25, 2010 at 11:09 PM</a>
+	</p>
+</div><a id="c6a00d83451c41c69e2013484ee124c970c"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-6a00d83451c41c69e2013484ee124c970c">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e2013484ee124c970c-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/17-50si.gif" alt="Dave Aronson" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-6a00d83451c41c69e2013484ee124c970c-content">
+		<span id="comment-6a00d83451c41c69e2013484ee124c970c-content"><p>Dave, it may be useful in some circumstances to have a bunch of word lists... but not for validating our results.  For that, we need to be using the same list.</p>
+
+<p>BTW, if you follow my URL link, be prepared for disappointment.  My (free) web host chose this past weekend to bungle a server move so web access by domain is hosed for now.  :-(  I&#39;m looking into alternate arrangements....</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://www.davearonson.com" href="http://www.davearonson.com">Dave Aronson</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=6a00d83451c41c69e2013484ee124c970c#comment-6a00d83451c41c69e2013484ee124c970c">June 25, 2010 at 01:13 PM</a>
+	</p>
+</div><a id="c6a00d83451c41c69e20120a758bff2970b"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-6a00d83451c41c69e20120a758bff2970b">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e20120a758bff2970b-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/12-50si.gif" alt="Martinho Fernandes" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-6a00d83451c41c69e20120a758bff2970b-content">
+		<span id="comment-6a00d83451c41c69e20120a758bff2970b-content"><p>I&#39;m getting the exact same results are Chris Hansen. However, if I run my algorithm with what I think is Dave&#39;s 234k words dictionary I get the &quot;correct&quot; 15048 sets.</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		Martinho Fernandes |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=6a00d83451c41c69e20120a758bff2970b#comment-6a00d83451c41c69e20120a758bff2970b">December 16, 2009 at 12:49 PM</a>
+	</p>
+</div><a id="c6a00d83451c41c69e20120a66c66c2970c"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-6a00d83451c41c69e20120a66c66c2970c">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e20120a66c66c2970c-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/04-50si.gif" alt="Dave Thomas" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-6a00d83451c41c69e20120a66c66c2970c-content">
+		<span id="comment-6a00d83451c41c69e20120a66c66c2970c-content"><p>Here&#39;s a link to lots of word lists: <a href="http://www.net-comber.com/wordurls.html" rel="nofollow">http://www.net-comber.com/wordurls.html</a></p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		Dave Thomas |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=6a00d83451c41c69e20120a66c66c2970c#comment-6a00d83451c41c69e20120a66c66c2970c">October 22, 2009 at 04:38 PM</a>
+	</p>
+</div><a id="c6a00d83451c41c69e20120a6151823970b"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-6a00d83451c41c69e20120a6151823970b">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e20120a6151823970b-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/17-50si.gif" alt="Mike Murray" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-6a00d83451c41c69e20120a6151823970b-content">
+		<span id="comment-6a00d83451c41c69e20120a6151823970b-content"><p>Does anyone have the word list?  The link in the post is broken.</p>
+
+<p>Thanks.</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://MurrayOn.NET/" href="http://MurrayOn.NET/">Mike Murray</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=6a00d83451c41c69e20120a6151823970b#comment-6a00d83451c41c69e20120a6151823970b">October 22, 2009 at 04:36 PM</a>
+	</p>
+</div><a id="c6a00d83451c41c69e20120a64ac424970c"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-6a00d83451c41c69e20120a64ac424970c">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e20120a64ac424970c-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/04-50si.gif" alt="Adrian" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-6a00d83451c41c69e20120a64ac424970c-content">
+		<span id="comment-6a00d83451c41c69e20120a64ac424970c-content"><p>the link to the wordlist is broken.</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		Adrian |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=6a00d83451c41c69e20120a64ac424970c#comment-6a00d83451c41c69e20120a64ac424970c">October 18, 2009 at 10:52 PM</a>
+	</p>
+</div><a id="c131193410"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-131193410">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e2010534ae3012970b-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/06-50si.gif" alt="Szczepan Faber" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-131193410-content">
+		<span id="comment-131193410-content"><p>Nice kata but the word list is missing (yields 404 when clicked)</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		Szczepan Faber |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=131193410#comment-6a00d83451c41c69e2010534ae3012970b">September 18, 2008 at 05:50 AM</a>
+	</p>
+</div><a id="c127953368"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-127953368">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200e554860d9b8834-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/12-50si.gif" alt="Vinothkumar.R" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-127953368-content">
+		<span id="comment-127953368-content"><p>def sort(word):<br />
+	res=[];<br />
+	res+=word[:-1];<br />
+	for i in range(len(res)):<br />
+		for j in range(len(res)):<br />
+			if(res[i]
+				(res[i],res[j])=(res[j],res[i]);<br />
+	ret=&quot;&quot;;<br />
+	for i in range(len(res)):<br />
+		ret+=res[i];<br />
+	<br />
+	return ret;<br />
+fil=open(&quot;inp.txt&quot;,&quot;r&quot;);<br />
+x=fil.readlines();<br />
+dict={};<br />
+for i in range(len(x)):<br />
+	alp=sort(x[i]);<br />
+	if(not dict.has_key(alp)):<br />
+		dict[alp]=[];<br />
+	dict[alp]+=[x[i][:-1]];<br />
+for i in dict.keys():<br />
+	l=dict[i];<br />
+	for j in range(len(l)):<br />
+		print l[j],<br />
+	print</p>
+
+<p><br />
+	</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		Vinothkumar.R |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=127953368#comment-6a00d83451c41c69e200e554860d9b8834">August 26, 2008 at 11:34 PM</a>
+	</p>
+</div><a id="c127953046"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-127953046">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200e55485f6cd8834-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/12-50si.gif" alt="Vinothkumar.R" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-127953046-content">
+		<span id="comment-127953046-content"><p>The word list link is showing file not found error. Could anyone give out the word list.<br />
+Thanks</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		Vinothkumar.R |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=127953046#comment-6a00d83451c41c69e200e55485f6cd8834">August 26, 2008 at 11:30 PM</a>
+	</p>
+</div><a id="c112777720"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-112777720">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200e552052ce88833-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/14-50si.gif" alt="Chris Hansen" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-112777720-content">
+		<span id="comment-112777720-content"><p>@algol: if you are referring to disregarding duplicates (ignoring case), as is hinted by your alias (ALGOL appears as well as Algol), then you should also exclude arpanet, basic (all 3 occurrences), and several others. I  don&#39;t see how this changed your count from 2531 to 2530.  Care to explain?</p>
+
+<p>I ignored case, counted punctuation (e.g. o&#39;neill does not match lionel), and threw away duplicate words. The number of anagram groups I got after doing so was 2506, which I believe is at least close to the *right* answer. Part of the reason that an answer key was not given was that many of these types of implementation details were not specified, but it was an interesting exercise nonetheless. Did anyone else make the same choices and get the same result?</p>
+
+<p>For those interested in performance, my implementation is in Scala and runs in about half a second. I know for a fact I could trim down that exec time, but I was more interested in keeping development time down instead ;)</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://polyglot-window.blogspot.com/" href="http://polyglot-window.blogspot.com/">Chris Hansen</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=112777720#comment-6a00d83451c41c69e200e552052ce88833">April 30, 2008 at 01:43 AM</a>
+	</p>
+</div><a id="c101306124"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-101306124">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200e55042ae928834-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/17-50si.gif" alt="algol" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-101306124-content">
+		<span id="comment-101306124-content"><p>Regarding the out by one error, 2530 is the correct number.  If you&#39;re getting 2531 there is another test that is needed. ;o)</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		algol |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=101306124#comment-6a00d83451c41c69e200e55042ae928834">February 11, 2008 at 09:04 PM</a>
+	</p>
+</div><a id="c84372488"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-84372488">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200e54eebd68a8833-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/19-50si.gif" alt="PhilipStevens" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-84372488-content">
+		<span id="comment-84372488-content"><p>Spent sometime playing with possibly implementations, making a lot of silly mistakes till I came up with some versions that worked how I wanted.</p>
+
+<p>I was using python.</p>
+
+<p>Below are my two implementations, the first merely goes line by line, converting the word into its alphabetical order and checking it against a dictionary (hash key), and either adding it to an existing one, or creating a new one for it.</p>
+
+<p>I then had it print out all the anagrams. It would take around 1 second with the print command, 0.85 seconds without it.</p>
+
+<p>(NOTE, ___ is indentation)<br />
+def anagram_finder():<br />
+____dict, file = {}, open(&#39;wordlist.txt&#39;, &#39;r&#39;)<br />
+____for line in file:<br />
+________strip_line = line.strip().lower()<br />
+________sort_line = str(sorted(strip_line))<br />
+________dict.setdefault(sort_line, []).append(strip_line)<br />
+____file.close()<br />
+____print &#39;\n&#39;.join([&#39;Anagrams are: %s&#39; % (v) for k, v in dict.items() if len(dict[k]) &gt; 1])</p>
+
+<p>My other version, which after some refraction seemed faster, was using the idea of prime numbers as keys suggested by Cameron Behar.</p>
+
+<p>def anagram_finder():<br />
+____primeAlpha = {&#39;a&#39;:2, &#39;b&#39;:3, &#39;c&#39;:5, &#39;d&#39;:7,&#39;e&#39; : 11, &#39;f&#39;:13, &#39;g&#39;:17, &#39;h&#39;:19,&#39;i&#39;:23, &#39;j&#39;:29, &#39;k&#39;:31, &#39;l&#39;:37, &#39;m&#39;:41, &#39;n&#39;:43, &#39;o&#39;: 47, &#39;p&#39;:53,&#39;q&#39;:59, &#39;r&#39;:61, &#39;s&#39;:67, &#39;t&#39;:71, &#39;u&#39;:73, &#39;v&#39;:79, &#39;w&#39;:83, &#39;x&#39;:89,y&#39;:97, &#39;z&#39;:101}<br />
+____dictAna =  {}<br />
+____file = open (&quot;wordlist.txt&quot;, &quot;r&quot;)<br />
+____for line in file: # each line<br />
+________value = 1<br />
+________for s in line:<br />
+____________if s.lower() in primeAlpha:<br />
+________________value *= primeAlpha[s.lower()]<br />
+________dictAna.setdefault(value, []).append(line.strip())<br />
+____file.close()<br />
+____print &quot;\n&quot;.join([&#39;Anagrams are: %s&#39; % (v) for k, v in dictAna.items() if len(dictAna[k]) &gt; 1])</p>
+
+<p>This was about 1 second with the print command, but 0.80 seconds without it.</p>
+
+<p>This was a pretty fun challenge for me, since I am not the greatest programming, or mathematical thinker.</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		PhilipStevens |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=84372488#comment-6a00d83451c41c69e200e54eebd68a8833">September 28, 2007 at 06:57 AM</a>
+	</p>
+</div><a id="c83219697"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-83219697">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200e54ee0bd638833-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/17-50si.gif" alt="Cameron Behar" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-83219697-content">
+		<span id="comment-83219697-content"><p>My friend and I once made a similar program, but we approached it differently. The most efficient way we could find was to reformat the dictionary file into a hash table. Each letter a-z was given a prime number. Then, the values for the letters of each word were multiplied and stored along with the string. We could then sort the dictionary based on the hash value so...</p>
+
+<p>When the time came to find the anagrams, we simply did a binary search or similar method to find all the equal hash values (multiplication is commutative so order doesn&#39;t matter, and long integer comparison is still faster than string) and grabbed its respective string. In this way, we actually used data collision to our advantage. I also ran a mathematical proof, however, to assure no unintentional data collisions (that might come as a result of common factors) and found none.</p>
+
+<p>This method, though a bit slow for the one time reformat, got our speeds down to ~48 ms in searches returning dozens of anagrams.</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		Cameron Behar |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=83219697#comment-6a00d83451c41c69e200e54ee0bd638833">September 18, 2007 at 02:47 PM</a>
+	</p>
+</div><a id="c69233264"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-69233264">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200d83549595b69e2-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/06-50si.gif" alt="Michael Davies" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-69233264-content">
+		<span id="comment-69233264-content"><p>The key appears to be to ignore case and spaces.</p>
+
+<p>This simple Smalltalk code gives 2531, which seems to be a common answer - is Dave suffering from the dreaded Out By One Error?</p>
+
+<p>dict := Dictionary new.<br />
+words := self loadFile: &#39;wordlist.txt&#39;.<br />
+words do: [ :word | | matches sorted |<br />
+____sorted := word asLowercase sort copyWithout: Character space.<br />
+____matches := dict at: sorted ifAbsent: [Array new].<br />
+____dict at: sorted put: (matches copyWith: word)].<br />
+anagrams := dict values select: [ :each | each size &gt; 1].<br />
+(underscores added for indentation).</p>
+
+<p>I used the Dictionary (hash) for a quick prototype - a more efficient implementation would probably be to use a Trie (prefix tree).</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://dreamsofascorpion.blogspot.com/" href="http://dreamsofascorpion.blogspot.com/">Michael Davies</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=69233264#comment-6a00d83451c41c69e200d83549595b69e2">May 11, 2007 at 03:43 PM</a>
+	</p>
+</div><a id="c68029010"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-68029010">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200d834f07c8e53ef-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/02-50si.gif" alt="Brian" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-68029010-content">
+		<span id="comment-68029010-content"><p>Dave, please post your code, or at least the full output.  No one seems<br />
+to be getting the same number of groups or words as you.  I&#39;ve pulled<br />
+together some links (and my own code) here:</p>
+
+<p><a href="http://brian-jaress.livejournal.com/3000.html" rel="nofollow">http://brian-jaress.livejournal.com/3000.html</a><br />
+</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://brian-jaress.livejournal.com" href="http://brian-jaress.livejournal.com">Brian</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=68029010#comment-6a00d83451c41c69e200d834f07c8e53ef">April 30, 2007 at 02:17 AM</a>
+	</p>
+</div><a id="c60332626"></a>
+<div class="comment comment-odd comment-has-avatar" id="comment-60332626">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200d83518700e69e2-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/07-50si.gif" alt="Jason Palmer" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-60332626-content">
+		<span id="comment-60332626-content"><p>I apologize.  The case in-sensitive comparison yielded 7886 anagrams not 7898.</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://www.jason-palmer.com/" href="http://www.jason-palmer.com/">Jason Palmer</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=60332626#comment-6a00d83451c41c69e200d83518700e69e2">February 12, 2007 at 03:27 PM</a>
+	</p>
+</div><a id="c60327924"></a>
+<div class="comment comment-even comment-has-avatar" id="comment-60327924">
+	<div class="comment-avatar">
+		<img id="comment-6a00d83451c41c69e200d834e3118253ef-avatarimg" src="http://static.typepad.com/.shared:v20110929.01-0-gb92b083:typepad:en_us/default-userpics/07-50si.gif" alt="Jason Palmer" width="50" height="50" />
+	</div>
+	<div class="comment-content" id="comment-60327924-content">
+		<span id="comment-60327924-content"><p>Hello, first I&#39;d like to thank you for code kata.  I really enjoy it.</p>
+
+<p>I designed a program to solve the anagram problem, however I got different results than you.  Using a case-sensitive comparison I was able to extract 6034 anagrams.  Using a case-insensitive comparison and stripping away special characters I was able to extract 7898 anagrams.</p>
+
+<p>If you wouldn&#39;t mind, I&#39;d really like to have you take a look at my script and help me to understand why our results differ.  Also, I would be extremely interested in seeing how you got your program to execute in 1.5 seconds.</p>
+
+<p>I&#39;ve posted my code and the resulting anagrams on my personal website:<br />
+<a href="http://www.jason-palmer.com/ruby-on-rails-tutorials/anagrams" rel="nofollow">http://www.jason-palmer.com/ruby-on-rails-tutorials/anagrams</a></p>
+
+<p>Thanks in advance!</p></span>
+	</div>
+	<p class="comment-footer">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://www.jason-palmer.com/" href="http://www.jason-palmer.com/">Jason Palmer</a> |
+		<a href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html?cid=60327924#comment-6a00d83451c41c69e200d834e3118253ef">February 12, 2007 at 02:43 PM</a>
+	</p>
+</div>
+
+		</div>
+        
+	</div>
+    	<!-- comment-form-atp -->
+
+
+<p class="comments-closed">
+	The comments to this entry are closed.
+</p>
+
+
+
+    	
+
+
+						</div>
+					</div>
+					<div id="beta">
+						<div id="beta-inner" class="pkg">
+							
+<!-- sidebar -->
+
+
+<div class="module-syndicate module">
+	<div class="module-content">
+		<a href="http://codekata.pragprog.com/atom.xml">Subscribe to this blog's feed</a>
+	</div>
+</div>
+<!-- user photo -->
+	<div class="module-photo module">
+		<div class="module-content"><img src="http://pragdave.blogs.pragprog.com/.a/6a00d83451c41c69e200e55005ede28834-150wi" alt="My Photo" /></div>
+	</div>
+
+<div class="module-typelist module">
+	<h2 class="module-header">Other links</h2>
+	<div class="typelist-plain module-content">
+		<ul class="module-list">
+							<li class="module-list-item"><div class="typelist-note-label"><a href="http://pragdave.pragprog.com">My Blog</a></div><div class="typelist-note">Dave's blog, which stuff on Ruby, Rails, general programming, careers, and other stuff.</div></li>
+							<li class="module-list-item"><div class="typelist-note-label"><a href="http://pragmaticprogrammer.com/">The Pragmatic Programmers</a></div><div class="typelist-note">Where it all started! Have a look at the books we're publishing on all sorts of programming topics. If you liked the kata, you might also like <a href="http://www.pragmaticprogrammer.com/titles/fr_quiz/">The Best of Ruby Quiz</a>.</div></li>
+			
+		</ul>
+	</div>
+</div>
+
+	<div class="module-archives module">
+		<h2 class="module-header"><a href="http://codekata.pragprog.com/archives.html">Archives</a></h2>
+		<div class="module-content">
+			<ul class="module-list">
+									<li class="module-list-item"><a href="http://codekata.pragprog.com/2007/01/index.html">January 2007</a></li>
+				
+			</ul>
+		</div>
+	</div>
+
+<div class="module-typelist module">
+	<h2 class="module-header">The Kata</h2>
+	<div class="module-content">
+		<ul class="module-list">
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/code_kata_one_s.html">1. Supermarket Pricing</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_two_karate.html">2. Karate Chop</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_three_how_.html">3. How Big, How Fast?</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_four_data_.html">4. Data Munging</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_five_bloom.html">5. Bloom Filters</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_six_anagra.html">6. Anagrams</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_seven_howd.html">7. How'd I Do?</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_eight_conf.html">8. Conflicting Objectives</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_nine_back_.html">9. Back to the CheckOut</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_ten_hashes.html">10. Hashes vs. Classes</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_eleven_sor.html">11. Sorting it Out</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_twelve_bes.html#more">12. Best Sellers</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_thirteen_c.html">13, Counting Code Lines</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_fourteen_t.html">14. Tom Swift Under Milk Wood</a></li>
+							<li class="module-list-item"><a title="" href="http://www.codekata.com/2007/01/code_kata_fifte.html">15. Playing With Bits</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_sixteen_bu.html#more">16. Business Rules</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_seventeen_.html">17. More Business Processing</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_eighteen_t.html">18. Transitive Dependencies</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_nineteen_w.html">19. Word Chains</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_twenty_klo.html">20. Klondike</a></li>
+							<li class="module-list-item"><a title="" href="http://codekata.pragprog.com/2007/01/kata_twenty_one.html">21. Simple Lists</a></li>
+			
+		</ul>
+	</div>
+</div>
+
+<div class="module-widget module" id="widget-Lijit_lijit_wijit">
+	<div class="module-content">
+    	<script type="text/javascript" src="http://www.lijit.com/informers/wijits?username=pragdave&amp;js=1"></script><a style='color: #999' href='http://www.lijit.com' id='lijit_wijit_pvs_link'>Lijit Search</a>
+	</div>
+</div>
+
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+			
+
+		</div>
+	</div>
+	
+
+<script type="text/javascript">
+<!--
+var extra_happy = Math.floor(1000000000 * Math.random());
+document.write('<img src="http://www.typepad.com/t/stats?blog_id=633036&amp;user_id=2226312&amp;page=' + escape(location.href) + '&amp;referrer=' + escape(document.referrer) + '&amp;i=' + extra_happy + '" width="1" height="1" alt="" style="position: absolute; top: 0; left: 0;" />');
+// -->
+</script>
+
+
+<!-- Start Quantcast tag -->
+<script type="text/javascript" src="http://edge.quantserve.com/quant.js"></script>
+<script type="text/javascript">_qoptions = { tags:"typepad.extended" }; _qacct="p-fcYWUmj5YbYKM"; quantserve();</script>
+<noscript>
+<a href="http://www.quantcast.com/p-fcYWUmj5YbYKM" target="_blank"><img src="http://pixel.quantserve.com/pixel/p-fcYWUmj5YbYKM.gif?tags=typepad.extended" style="display: none" border="0" height="1" width="1" alt="Quantcast"/></a>
+</noscript>
+<!-- End Quantcast tag -->
+
+
+
+ 
+
+<!-- Blogside Toolbar -->
+<script type="text/javascript">
+    var TPToolbar = {
+        src:   "http://www.typepad.com/services/toolbar?blog_id=6a00d83451c41c69e200d8341c84fe53ef&asset_id=6a00d83451c41c69e200d835186bf269e2&atype=Individual&to=http%3A%2F%2Fcodekata.pragprog.com%2F2007%2F01%2Fkata_six_anagra.html&autofollowed=0",
+        asset_xid: "6a00d83451c41c69e200d835186bf269e2",
+    
+        bookmarklet_uri: "http://static.typepad.com/.shared/js/qp/loader-combined-min.js"
+    };
+    var TYPEPAD___bookmarklet_domain = "http://www.typepad.com/";
+</script>
+<script type="text/javascript" src="/.shared/js/toolbar/blogside-toolbar-combined-min.js"></script>
+<!-- End Blogside Toolbar -->
+<!-- Begin comScore Tag -->
+<script>
+document.write(unescape("%3Cscript src='" + (document.location.protocol == "https:" ? "https://sb" : "http://b") + ".scorecardresearch.com/beacon.js'%3E%3C/script%3E"));
+</script>
+<script>
+COMSCORE.beacon({
+  c1: 2,
+  c2: "6035669",
+  c3: "",
+  c4: "http://codekata.pragprog.com/2007/01/kata_six_anagra.html",
+  c5: "",
+  c6: "",
+  c15: ""
+});
+</script>
+<noscript>
+  <img src="http://b.scorecardresearch.com/b?c1=2&c2=6035669&c3=&c4=http%3A%2F%2Fcodekata.pragprog.com%2F2007%2F01%2Fkata_six_anagra.html&c5=&c6=&c15=&cv=1.3&cj=1" style="display:none" width="0" height="0" alt="" />
+</noscript>
+<!-- End comScore Tag -->
+</body>
+</html>
+<!-- ph=1 -->
