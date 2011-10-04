@@ -1,150 +1,151 @@
 
 * Code Kata One - Supermarket Pricing
-  This kata arose from some discussions we’ve been having at the DFW
-  Practioners meetings. The problem domain is something seemingly
-  simple: pricing goods at supermarkets.
+** Problem
+   This kata arose from some discussions we’ve been having at the DFW
+   Practioners meetings. The problem domain is something seemingly
+   simple: pricing goods at supermarkets.
 
-  Some things in supermarkets have simple prices: this can of beans
-  costs $0.65. Other things have more complex prices. For example:
+   Some things in supermarkets have simple prices: this can of beans
+   costs $0.65. Other things have more complex prices. For example:
 
-  three for a dollar (so what’s the price if I buy 4, or 5?)
-  $1.99/pound (so what does 4 ounces cost?)  buy two, get one free (so
-  does the third item have a price?)
+   three for a dollar (so what’s the price if I buy 4, or 5?)
+   $1.99/pound (so what does 4 ounces cost?)  buy two, get one free (so
+   does the third item have a price?)
 
-  This kata involves no coding. The exercise is to experiment with
-  various models for representing money and prices that are flexible
-  enough to deal with these (and other) pricing schemes, and at the
-  same time are generally usable (at the checkout, for stock
-  management, order entry, and so on). Spend time considering issues
-  such as:
+   This kata involves no coding. The exercise is to experiment with
+   various models for representing money and prices that are flexible
+   enough to deal with these (and other) pricing schemes, and at the
+   same time are generally usable (at the checkout, for stock
+   management, order entry, and so on). Spend time considering issues
+   such as:
 
-  does fractional money exist?  when (if ever) does rounding take
-  place?  how do you keep an audit trail of pricing decisions (and do
-  you need to)?  are costs and prices the same class of thing?  if a
-  shelf of 100 cans is priced using "buy two, get one free", how do
-  you value the stock?
+   does fractional money exist?  when (if ever) does rounding take
+   place?  how do you keep an audit trail of pricing decisions (and do
+   you need to)?  are costs and prices the same class of thing?  if a
+   shelf of 100 cans is priced using "buy two, get one free", how do
+   you value the stock?
 
-  This is an ideal shower-time kata, but be careful. Some of the
-  problems are more subtle than they first appear. I suggest that it
-  might take a couple of weeks worth of showers to exhaust the main
-  alternatives.  Goal
+   This is an ideal shower-time kata, but be careful. Some of the
+   problems are more subtle than they first appear. I suggest that it
+   might take a couple of weeks worth of showers to exhaust the main
+   alternatives.  Goal
 
-  The goal of this kata is to practice a looser style of experimental
-  modelling. Look for as many different ways of handling the issues as
-  possible. Consider the various tradeoffs of each. What techniques
-  use best for exploring these models? For recording them? How can you
-  validate a model is reasonable?  What’s a Code Kata?
+   The goal of this kata is to practice a looser style of experimental
+   modelling. Look for as many different ways of handling the issues as
+   possible. Consider the various tradeoffs of each. What techniques
+   use best for exploring these models? For recording them? How can you
+   validate a model is reasonable?  What’s a Code Kata?
 
-  As a group, software developers don’t practice enough. Most of our
-  learning takes place on the job, which means that most of our
-  mistakes get made there as well. Other creative professions
-  practice: artists carry a sketchpad, musicians play technical
-  pieces, poets constantly rewrite works. In karate, where the aim is
-  to learn to spar or fight, most of a student’s time is spent
-  learning and refining basic moves. The more formal of these
-  exercises are called kata.
+   As a group, software developers don’t practice enough. Most of our
+   learning takes place on the job, which means that most of our
+   mistakes get made there as well. Other creative professions
+   practice: artists carry a sketchpad, musicians play technical
+   pieces, poets constantly rewrite works. In karate, where the aim is
+   to learn to spar or fight, most of a student’s time is spent
+   learning and refining basic moves. The more formal of these
+   exercises are called kata.
 
-  To help developers get the same benefits from practicing, we’re
-  putting together a series of code kata: simple, artificial exercises
-  which let us experiment and learn without the pressure of a
-  production environment. Our suggestions for doing the kata are:
+   To help developers get the same benefits from practicing, we’re
+   putting together a series of code kata: simple, artificial exercises
+   which let us experiment and learn without the pressure of a
+   production environment. Our suggestions for doing the kata are:
 
-  find a place and time where you won’t be interrupted focus on the
-  essential elements of the kata remember to look for feedback for
-  every major decision if it helps, keep a journal of your progress
-  have discussion groups with other developers, but try to have
-  completed the kata first
+   find a place and time where you won’t be interrupted focus on the
+   essential elements of the kata remember to look for feedback for
+   every major decision if it helps, keep a journal of your progress
+   have discussion groups with other developers, but try to have
+   completed the kata first
 
-  There are no right or wrong answers in these kata: the benefit comes
-  from the process, not from the result.
-
+   There are no right or wrong answers in these kata: the benefit comes
+   from the process, not from the result.
 
 ** Answer
 
 * Karate chop
+** Problem
+   A binary chop (sometimes called the more prosaic binary search)
+   finds the position of value in a sorted array of values. It achieves
+   some efficiency by halving the number of items under consideration
+   each time it probes the values: in the first pass it determines
+   whether the required value is in the top or the bottom half of the
+   list of values. In the second pass in considers only this half,
+   again dividing it in to two. It stops when it finds the value it is
+   looking for, or when it runs out of array to search. Binary searches
+   are a favorite of CS lecturers.
 
-  A binary chop (sometimes called the more prosaic binary search)
-  finds the position of value in a sorted array of values. It achieves
-  some efficiency by halving the number of items under consideration
-  each time it probes the values: in the first pass it determines
-  whether the required value is in the top or the bottom half of the
-  list of values. In the second pass in considers only this half,
-  again dividing it in to two. It stops when it finds the value it is
-  looking for, or when it runs out of array to search. Binary searches
-  are a favorite of CS lecturers.
+   This Kata is straightforward. Implement a binary search routine
+   (using the specification below) in the language and technique of
+   your choice. Tomorrow, implement it again, using a totally different
+   technique. Do the same the next day, until you have five totally
+   unique implementations of a binary chop. (For example, one solution
+   might be the traditional iterative approach, one might be recursive,
+   one might use a functional style passing array slices around, and so
+   on).  Goals
 
-  This Kata is straightforward. Implement a binary search routine
-  (using the specification below) in the language and technique of
-  your choice. Tomorrow, implement it again, using a totally different
-  technique. Do the same the next day, until you have five totally
-  unique implementations of a binary chop. (For example, one solution
-  might be the traditional iterative approach, one might be recursive,
-  one might use a functional style passing array slices around, and so
-  on).  Goals
+   This Kata has three separate goals:
 
-  This Kata has three separate goals:
+   As you’re coding each algorithm, keep a note of the kinds of error
+   you encounter. A binary search is a ripe breeding ground for "off by
+   one" and fencepost errors. As you progress through the week, see if
+   the frequency of these errors decreases (that is, do you learn from
+   experience in one technique when it comes to coding with a different
+   technique?).  What can you say about the relative merits of the
+   various techniques you’ve chosen? Which is the most likely to make
+   it in to production code? Which was the most fun to write? Which was
+   the hardest to get working? And for all these questions, ask
+   yourself "why?".  It’s fairly hard to come up with five unique
+   approaches to a binary chop. How did you go about coming up with
+   approaches four and five? What techniques did you use to fire those
+   "off the wall" neurons?
 
-  As you’re coding each algorithm, keep a note of the kinds of error
-  you encounter. A binary search is a ripe breeding ground for "off by
-  one" and fencepost errors. As you progress through the week, see if
-  the frequency of these errors decreases (that is, do you learn from
-  experience in one technique when it comes to coding with a different
-  technique?).  What can you say about the relative merits of the
-  various techniques you’ve chosen? Which is the most likely to make
-  it in to production code? Which was the most fun to write? Which was
-  the hardest to get working? And for all these questions, ask
-  yourself "why?".  It’s fairly hard to come up with five unique
-  approaches to a binary chop. How did you go about coming up with
-  approaches four and five? What techniques did you use to fire those
-  "off the wall" neurons?
+   Specification
 
-  Specification
+   Write a binary chop method that takes an integer search target and a
+   sorted array of integers. It should return the integer index of the
+   target in the array, or -1 if the target is not in the array. The
+   signature will logically be:
 
-  Write a binary chop method that takes an integer search target and a
-  sorted array of integers. It should return the integer index of the
-  target in the array, or -1 if the target is not in the array. The
-  signature will logically be:
+   chop(int, array_of_int)  -> int
 
-  chop(int, array_of_int)  -> int
+   You can assume that the array has less than 100,000 elements. For
+   the purposes of this Kata, time and memory performance are not
+   issues (assuming the chop terminates before you get bored and kill
+   it, and that you have enough RAM to run it).  Test Data
 
-  You can assume that the array has less than 100,000 elements. For
-  the purposes of this Kata, time and memory performance are not
-  issues (assuming the chop terminates before you get bored and kill
-  it, and that you have enough RAM to run it).  Test Data
+   Here is the Test::Unit code I used when developing my methods. Feel
+   free to add to it. The tests assume that array indices start at
+   zero. You’ll probably have to do a couple of global
+   search-and-replaces to make this compile in your language of choice
+   (unless your enlightened choice happens to be Ruby).
 
-  Here is the Test::Unit code I used when developing my methods. Feel
-  free to add to it. The tests assume that array indices start at
-  zero. You’ll probably have to do a couple of global
-  search-and-replaces to make this compile in your language of choice
-  (unless your enlightened choice happens to be Ruby).
-
-  #+begin_src ruby
-  def test_chop
-    assert_equal(-1, chop(3, []))
-    assert_equal(-1, chop(3, [1]))
-    assert_equal(0,  chop(1, [1]))
-    #
-    assert_equal(0,  chop(1, [1, 3, 5]))
-    assert_equal(1,  chop(3, [1, 3, 5]))
-    assert_equal(2,  chop(5, [1, 3, 5]))
-    assert_equal(-1, chop(0, [1, 3, 5]))
-    assert_equal(-1, chop(2, [1, 3, 5]))
-    assert_equal(-1, chop(4, [1, 3, 5]))
-    assert_equal(-1, chop(6, [1, 3, 5]))
-    #
-    assert_equal(0,  chop(1, [1, 3, 5, 7]))
-    assert_equal(1,  chop(3, [1, 3, 5, 7]))
-    assert_equal(2,  chop(5, [1, 3, 5, 7]))
-    assert_equal(3,  chop(7, [1, 3, 5, 7]))
-    assert_equal(-1, chop(0, [1, 3, 5, 7]))
-    assert_equal(-1, chop(2, [1, 3, 5, 7]))
-    assert_equal(-1, chop(4, [1, 3, 5, 7]))
-    assert_equal(-1, chop(6, [1, 3, 5, 7]))
-    assert_equal(-1, chop(8, [1, 3, 5, 7]))
-  end
-  #+end_src
+   #+begin_src ruby
+   def test_chop
+     assert_equal(-1, chop(3, []))
+     assert_equal(-1, chop(3, [1]))
+     assert_equal(0,  chop(1, [1]))
+     #
+     assert_equal(0,  chop(1, [1, 3, 5]))
+     assert_equal(1,  chop(3, [1, 3, 5]))
+     assert_equal(2,  chop(5, [1, 3, 5]))
+     assert_equal(-1, chop(0, [1, 3, 5]))
+     assert_equal(-1, chop(2, [1, 3, 5]))
+     assert_equal(-1, chop(4, [1, 3, 5]))
+     assert_equal(-1, chop(6, [1, 3, 5]))
+     #
+     assert_equal(0,  chop(1, [1, 3, 5, 7]))
+     assert_equal(1,  chop(3, [1, 3, 5, 7]))
+     assert_equal(2,  chop(5, [1, 3, 5, 7]))
+     assert_equal(3,  chop(7, [1, 3, 5, 7]))
+     assert_equal(-1, chop(0, [1, 3, 5, 7]))
+     assert_equal(-1, chop(2, [1, 3, 5, 7]))
+     assert_equal(-1, chop(4, [1, 3, 5, 7]))
+     assert_equal(-1, chop(6, [1, 3, 5, 7]))
+     assert_equal(-1, chop(8, [1, 3, 5, 7]))
+   end
+   #+end_src
 
 * Kata Three: How Big, How Fast?
+** Problem
 
 Rough estimation is a useful talent to possess. As you’re coding away,
 you may suddenly need to work out approximately how big a data
@@ -193,7 +194,7 @@ How Fast?
     attacking a password?
 
 * Kata Four: Data Munging
-
+** Problem
 Martin Fowler gave me a hard time for KataTwo, complaining that it was
 yet another single-function, academic exercise. Which, or course, it
 was. So this week let’s mix things up a bit.
@@ -233,7 +234,7 @@ requirement? How about the maintainability?
    matching lines and apply the given function to the result.
 
 * Kata Five - Bloom Filters
-
+** Problem
 There are many circumstances where we need to find out if something is
 a member of a set, and many algorithms for doing it. If the set is
 small, you can use bitmaps. When they get larger, hashes are a useful
@@ -325,3 +326,51 @@ how many false positives you get.
     array of booleans and use it smartly.  Unfortunately booleans are
     not supported in as types in the array, so we have to resort to
     use long integers and do some math with them.
+* Kata Six: Anagrams
+** Problem
+Back to non-realistic coding this week (sorry, Martin). Let's solve some crossword puzzle clues.
+
+In England, I used to waste hour upon hour doing newspaper crosswords. As crossword fans will know, English cryptic crosswords have a totally different feel to their American counterparts: most clues involve punning or word play, and there are lots of anagrams to work through. For example, a recent Guardian crossword had:
+
+  Down:
+    ..
+    21. Most unusual form of arrest (6)
+
+The hint is the phrase ‘form of,’ indicating that we’re looking for an anagram. Sure enough ‘arrest’ has six letters, and can be arranged nicely into ‘rarest,’ meaning ‘most unusual.’ (Other anagrams include raster, raters, Sartre, and starer)
+
+A while back we had a thread on the Ruby mailing list about finding anagrams, and I’d like to resurrect it here. The challenge is fairly simple: given a file containing one word per line, print out all the combinations of words that are anagrams; each line in the output contains all the words from the input that are anagrams of each other. For example, your program might include in its output:
+
+  kinship pinkish
+  enlist inlets listen silent
+  boaster boaters borates
+  fresher refresh
+  sinks skins
+  knits stink
+  rots sort
+
+If you run this on the word list here you should find 2,530 sets of anagrams (a total of 5,680 words). Running on a larger dictionary (about 234k words) on my OSX box produces 15,048 sets of anagrams (including all-time favorites such as actaeonidae/donatiaceae, crepitant/pittancer, and (for those readers in Florida) electoral/recollate).
+
+For added programming pleasure, find the longest words that are anagrams, and find the set of anagrams containing the most words (so "parsley players replays sparely" would not win, having only four words in the set).
+Kata Objectives
+
+Apart from having some fun with words, this kata should make you think somewhat about algorithms. The simplest algorithms to find all the anagram combinations may take inordinate amounts of time to do the job. Working though alternatives should help bring the time down by orders of magnitude. To give you a possible point of comparison, I hacked a solution together in 25 lines of Ruby. It runs on the word list from my web site in 1.5s on a 1GHz PPC. It’s also an interesting exercise in testing: can you write unit tests to verify that your code is working correctly before setting it to work on the full dictionary.
+
+* Kata Seven: How'd I Do?
+** Problem
+The last couple of kata have been programming challenges; let’s move back into mushier, people-oriented stuff this week.
+
+This kata is about reading code critically—our own code. Here’s the challenge. Find a piece of code you wrote last year sometime. It should be a decent sized chunk, perhaps 500 to 1,000 lines long. Pick code which isn’t still fresh in your mind.
+
+Now we need to do some acting. Read through this code three times. Each time through, pretend something different. Each time, jot down notes on the stuff you find.
+
+    The first time through, pretend that the person who wrote this code is the best programmer you know. Look for all the examples of great code in the program.
+    The second time through, pretend that the person who wrote this code is the worst programmer you know. Look for all the examples of horrible code and bad design.
+    The third (and last) time though, pretend that you’ve been told that this code contains serious bugs, and that the client is going to sue you to bankruptcy unless you fix them. Look for every potential bug in the code.
+
+Now look at the notes you made. What is the nature of the good stuff you found? Would you find similar good stuff in the code you’re writing today. What about the bad stuff; are similar pieces of code sneaking in to your current code too. And finally, did you find any bugs in the old code? If so, are any of them things that that you’d want to fix now that you’ve found them. Are any of them systematic errors that you might still be making today?
+Moving Forward By Looking Back
+
+Perhaps you’re not like me, but whenever I try this exercise I find things that pleasantly surprise me and things that make me cringe in embarrassment. I find the occasional serious bug (along with more frequent less but serious issues). So I try to make a point of looking back at my code fairly frequently.
+
+However, doing this six months after you write code is not the best way of developing good software today. So the underlying challenge of this kata is this: how can we get into the habit of critically reviewing the code that we write, as we write it? And can we use the techniques of reading code with different expectations (good coder, bad coder, and bug hunt) when we’re reviewing our colleagues code?
+
